@@ -214,7 +214,7 @@ def get_enriched(bids, motel):
 
 
 def process_data(session, bids_path, motels_path, exchange_rates_path,
-                 output_base_path: str):
+                 output_base_path):
     """
     Task 1:
         * Read the bid data from the provided file
