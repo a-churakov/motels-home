@@ -8,5 +8,15 @@ pipeline {
                 stash(name: 'compiled-results', includes: 'venv/com.training.spark/*.py*')
             }
         }
+        stage('Test') {
+            steps {
+                sh 'py.test --junit-xml test-reports/results.xml venv/com.training.spark/motels_home_tests.py'
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
+            }
+        }
     }
 }
