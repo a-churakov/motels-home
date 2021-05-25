@@ -16,7 +16,7 @@ ERRONEOUS_DIR = "erroneous"
 AGGREGATED_DIR = "aggregated"
 
 
-def get_raw_bids(session: SparkSession, bids_path: str) -> DataFrame:
+def get_raw_bids(session:SparkSession, bids_path: str) -> DataFrame:
     schema = StructType([StructField(constants.BIDS_HEADER[0], IntegerType()),
                          StructField(constants.BIDS_HEADER[1], TimestampType()),
                          StructField(constants.BIDS_HEADER[2], StringType()),
