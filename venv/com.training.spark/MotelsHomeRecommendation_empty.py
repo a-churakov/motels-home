@@ -16,7 +16,7 @@ ERRONEOUS_DIR = "erroneous"
 AGGREGATED_DIR = "aggregated"
 
 
-def get_raw_bids(session, bids_path) -> DataFrame:
+def get_raw_bids(session, bids_path):
     schema = StructType([StructField(constants.BIDS_HEADER[0], IntegerType()),
                          StructField(constants.BIDS_HEADER[1], TimestampType()),
                          StructField(constants.BIDS_HEADER[2], StringType()),
@@ -46,7 +46,7 @@ def get_raw_bids(session, bids_path) -> DataFrame:
     pass
 
 
-def get_erroneous_records(bids) -> DataFrame:
+def get_erroneous_records(bids):
     erroneous_records_df = bids.filter(bids.HU.contains('ERROR_'))
 
     erroneous_records_df = erroneous_records_df.select(
@@ -58,7 +58,7 @@ def get_erroneous_records(bids) -> DataFrame:
     pass
 
 
-def get_exchange_rates(session, path) -> dict:
+def get_exchange_rates(session, path):
     schema = StructType([StructField(constants.EXCHANGE_RATES_HEADER[0], TimestampType()),
                          StructField(constants.EXCHANGE_RATES_HEADER[1], StringType()),
                          StructField(constants.EXCHANGE_RATES_HEADER[2], StringType()),
@@ -80,7 +80,7 @@ def get_exchange_rates(session, path) -> dict:
     pass
 
 
-def get_bids(bids, rates) -> DataFrame:
+def get_bids(bids, rates):
     bids_df = get_bids_without_error(bids)
     bids_df = get_bids_select_countries(bids_df)
     bids_df = get_bids_rows(bids_df)
@@ -91,13 +91,13 @@ def get_bids(bids, rates) -> DataFrame:
     pass
 
 
-def get_bids_without_error(bids) -> DataFrame:
+def get_bids_without_error(bids):
     bids_without_error_df = bids.filter(~ bids.HU.contains('ERROR_'))
     return bids_without_error_df
     pass
 
 
-def get_bids_select_countries(bids) -> DataFrame:
+def get_bids_select_countries(bids):
     bids_select_countries_df = bids.select(
         constants.BIDS_HEADER[0], constants.BIDS_HEADER[1], constants.TARGET_LOSAS[0],
         constants.TARGET_LOSAS[1], constants.TARGET_LOSAS[2])
@@ -106,7 +106,7 @@ def get_bids_select_countries(bids) -> DataFrame:
     pass
 
 
-def get_bids_rows(bids) -> DataFrame:
+def get_bids_rows(bids):
     bids_rows_df = bids.selectExpr("MotelID", "BidDate", "stack(5, 'US', US, 'CA', CA, 'MX', MX)")\
         .withColumnRenamed("col0", "Losa")\
         .withColumnRenamed("col1", "Price")\
@@ -116,7 +116,7 @@ def get_bids_rows(bids) -> DataFrame:
     pass
 
 
-def convert_usd_to_eur(bids, rates) -> DataFrame:
+def convert_usd_to_eur(bids, rates):
     bids.show()
 
     #bids.foreach(lambda row: get_bid_item(row))
@@ -147,7 +147,7 @@ def convert_usd_to_eur(bids, rates) -> DataFrame:
     pass
 
 
-def get_update_bids(original_value, exchange_rate) -> DoubleType:
+def get_update_bids(original_value, exchange_rate):
     return original_value * exchange_rate
     pass
 
@@ -166,7 +166,7 @@ def row_update1(row, rates):
     pass
 
 
-def row_update(date, original_value, rates) -> DoubleType:
+def row_update(date, original_value, rates):
     value = rates.get(date)
     if value is not None:
         original_value *= value
@@ -177,7 +177,7 @@ def row_update(date, original_value, rates) -> DoubleType:
     pass
 
 
-def get_motels(session, path) -> DataFrame:
+def get_motels(session, path):
     schema = StructType([StructField(constants.MOTELS_HEADER[0], IntegerType()),
                          StructField(constants.MOTELS_HEADER[1], StringType()),
                          StructField(constants.MOTELS_HEADER[2], StringType()),
@@ -194,7 +194,7 @@ def get_motels(session, path) -> DataFrame:
     pass
 
 
-def get_enriched(bids, motel) -> DataFrame:
+def get_enriched(bids, motel):
     bids_motels_df = bids.join(motel, bids['MotelID'] == motel['MotelID'], 'inner')\
         .select(motel['MotelID'], motel['MotelName'], bids['BidDate'], bids['Losa'], bids['Price'])
 
