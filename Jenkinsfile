@@ -8,8 +8,8 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m py_compile com.training.spark/constants.py com.training.spark/MotelsHomeRecommendation_empty.py'
-                stash(name: 'compiled-results', includes: 'com.training.spark/*.py*')
+                sh 'python -m py_compile venv/com.training.spark/constants.py venv/com.training.spark/MotelsHomeRecommendation_empty.py'
+                stash(name: 'compiled-results', includes: 'venv/com.training.spark/*.py*')
             }
         }
     }
