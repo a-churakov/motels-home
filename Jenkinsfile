@@ -9,13 +9,8 @@ pipeline {
             }
         }
         stage('Test') {
-            agent {
-                docker {
-                    image 'qnib/pytest'
-                }
-            }
             steps {
-                sh 'py.test --junit-xml test-reports/results.xml venv/com.training.spark/motels_home_tests.py'
+                sh 'python tests.py --junit-xml test-reports/results.xml venv/com.training.spark/motels_home_tests.py'
             }
             post {
                 always {
