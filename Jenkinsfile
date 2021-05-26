@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'python venv/com.training.spark/motels_home_tests.py --verbose --junit-xml test-reports/results.xml'
+                sh 'unittest venv/com.training.spark/motels_home_tests.py --junit-xml test-reports/results.xml'
             }
             post {
                 always {
